@@ -1,0 +1,13 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+cv.txt
+jd.txt
+.vscode/
+.idea/
+.claude/
+*.PNG
+*.png
+uv.lock
