@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
     QTabWidget, QTextEdit, QTextBrowser, QPushButton, QLabel,
     QFileDialog, QSizeGrip, QFrame,
-    QSystemTrayIcon, QMenu, QRubberBand
+    QSystemTrayIcon, QMenu, QRubberBand, QMessageBox
 )
 from PyQt6.QtCore import Qt, QPoint, QRect, QSize, QBuffer, QIODeviceBase, QUrl, pyqtSignal
 from PyQt6.QtGui import QFont, QColor, QPalette, QIcon, QPixmap, QPainter, QAction, QScreen
@@ -625,10 +625,46 @@ class OverlayWindow(QWidget):
             self.on_ask_ai()
 
     def _on_clear_clicked(self):
-        self.ai_output.clear()
-        self.transcript_preview.clear()
-        if self.on_clear:
-            self.on_clear()
+        # Show confirmation dialog before clearing
+        msg = QMessageBox(self)
+        msg.setWindowTitle("Clear Conversation")
+        msg.setText("Are you sure you want to clear everything?")
+        msg.setInformativeText(
+            "This will reset all conversation history, transcript, and AI responses. "
+            "A new interview session will start."
+        )
+        msg.setStandardButtons(
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        msg.setDefaultButton(QMessageBox.StandardButton.No)
+        msg.setStyleSheet("""
+            QMessageBox {
+                background-color: #1e1e2e;
+                color: #cdd6f4;
+            }
+            QLabel {
+                color: #cdd6f4;
+                font-size: 12px;
+            }
+            QPushButton {
+                background-color: #313244;
+                color: #cdd6f4;
+                border: 1px solid #45475a;
+                border-radius: 6px;
+                padding: 6px 16px;
+                font-size: 11px;
+            }
+            QPushButton:hover {
+                background-color: #45475a;
+            }
+        """)
+
+        if msg.exec() == QMessageBox.StandardButton.Yes:
+            self.ai_output.clear()
+            self.transcript_preview.clear()
+            self.status_label.setText("Status: Ready — New Session")
+            if self.on_clear:
+                self.on_clear()
 
     # ── Screenshot Capture ───────────────────────────────────
 

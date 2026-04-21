@@ -44,13 +44,15 @@ def main():
 
     def _ask_ai_worker():
         transcript = text_buffer.get_full_transcript()
-        text_buffer.clear()
         prompt = context_manager.get_prompt(transcript)
         response = ai_client.ask(prompt)
+        # Save to conversation history for memory
+        context_manager.add_to_history(transcript, response.strip())
         window.ai_response_signal.emit(response.strip())
 
     def clear_all():
         text_buffer.clear()
+        context_manager.clear_history()
 
     # ── Screenshot solve logic ────────────────────────────
 
