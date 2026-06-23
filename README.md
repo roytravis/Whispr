@@ -1,3 +1,7 @@
+## UI / UX Mockup
+
+![UI Mockup](ui_mockup.png)
+
 # 🎙️ Whispr
 
 > AI-powered stealth interview assistant — listens to your conversation, remembers context, and whispers smart answers in real-time. Invisible to screen share.
